@@ -106,7 +106,7 @@ int main()
 		x = position.x;
 		y = position.y;
 		string direction = "up";
-		float speed = 1;
+		float speed = 0.1;
 		bool life = false, put = false;
 		snakesize = snake.getSize();
 
