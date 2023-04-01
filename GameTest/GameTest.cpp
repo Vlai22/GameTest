@@ -37,6 +37,38 @@ int main()
 	snake.setFillColor(Color::Blue);
 	snake.setPosition(750, 520);
 
+	RectangleShape* snakearr = new RectangleShape[10]();
+	snakearr[0].setPosition(Vector2f(750,530));
+	snakearr[0].setFillColor(Color::Blue);
+	snakearr[0].setSize(Vector2f(10,10));
+	snakearr[1].setPosition(Vector2f(750, 540));
+	snakearr[1].setFillColor(Color::Blue);
+	snakearr[1].setSize(Vector2f(10, 10));
+	snakearr[2].setPosition(Vector2f(750, 550));
+	snakearr[2].setFillColor(Color::Blue);
+	snakearr[2].setSize(Vector2f(10, 10));
+	snakearr[3].setPosition(Vector2f(750, 560));
+	snakearr[3].setFillColor(Color::Blue);
+	snakearr[3].setSize(Vector2f(10, 10));
+	snakearr[4].setPosition(Vector2f(750, 570));
+	snakearr[4].setFillColor(Color::Blue);
+	snakearr[4].setSize(Vector2f(10, 10));
+	snakearr[5].setPosition(Vector2f(750, 580));
+	snakearr[5].setFillColor(Color::Blue);
+	snakearr[5].setSize(Vector2f(10, 10));
+	snakearr[6].setPosition(Vector2f(750, 590));
+	snakearr[6].setFillColor(Color::Blue);
+	snakearr[6].setSize(Vector2f(10, 10));
+	snakearr[7].setPosition(Vector2f(750, 600));
+	snakearr[7].setFillColor(Color::Blue);
+	snakearr[7].setSize(Vector2f(10, 10));
+	snakearr[8].setPosition(Vector2f(750, 610));
+	snakearr[8].setFillColor(Color::Blue);
+	snakearr[8].setSize(Vector2f(10, 10));
+	snakearr[9].setPosition(Vector2f(750, 620));
+	snakearr[9].setFillColor(Color::Blue);
+	snakearr[9].setSize(Vector2f(10, 10));
+
 	RectangleShape rectangle(Vector2f(500, 1000));
 	rectangle.setFillColor(Color::White);
 	rectangle.setOutlineThickness(5);
@@ -100,7 +132,7 @@ int main()
 		}
 		//Variables
 		float x, y;
-		int scope = 0;
+		int scope = 0, snakearrsize = 9;
 		Vector2f position,snakesize,epos;
 		position = snake.getPosition();
 		x = position.x;
@@ -109,6 +141,7 @@ int main()
 		float speed = 0.1;
 		bool life = false, put = false;
 		snakesize = snake.getSize();
+		
 
 		if (x <= 500 || x >= 990) {
 			snake.setPosition(750, 520);
@@ -215,19 +248,124 @@ int main()
 				put = false;
 			}
 			snake.setPosition(x, y);
-			textspeed.setString("Speed:" + to_string(speed));
+			if (direction == "up") {
+				if (snake.getPosition().x != snakearr[0].getPosition().x) {
+					snakearr[0].setPosition(snake.getPosition().x, snakearr[0].getPosition().y);
+					for (int i = 1; i < snakearrsize; i++) {
+						if (snake.getPosition().x - snakearr[i].getPosition().x > 0) {
+							snakearr[i].setPosition(snakearr[i - 1].getPosition().x - 10, snakearr[i].getPosition().y);
+						}
+						else {
+							snakearr[i].setPosition(snakearr[i - 1].getPosition().x + 10, snakearr[i].getPosition().y);
+						}
+					}
+				}
+				if (snake.getPosition().y < snakearr[0].getPosition().y - 10) {
+					snakearr[0].setPosition(snakearr[0].getPosition().x, y + 10);
+				}
+				if (snakearr[0].getPosition().x - snakearr[1].getPosition().x >= 10 || snakearr[0].getPosition().x - snakearr[1].getPosition().x <= -10) {
+					if (snakearr[0].getPosition().y - snakearr[1].getPosition().y >= -10) {
+						snakearr[1].setPosition(snakearr[0].getPosition().x, snakearr[1].getPosition().y);
+					}
+				}
+				if (snakearr[0].getPosition().y - snakearr[1].getPosition().y <= -10) {
+					snakearr[1].setPosition(snakearr[1].getPosition().x,snakearr[0].getPosition().y + 10);
+				}
+				for (int i = 2; i < snakearrsize;i++ ) {
+					if (snakearr[i - 1].getPosition().x - snakearr[i].getPosition().x >= 10 || snakearr[i - 1].getPosition().x - snakearr[i].getPosition().x <= -10) {
+						if (snakearr[i - 1].getPosition().y - snakearr[i].getPosition().y <= -10) {
+							if (snakearr[i].getPosition().x - snakearr[i - 1].getPosition().x > 0) {
+								snakearr[i].setPosition(snakearr[i - 1].getPosition().x, snakearr[i].getPosition().y);
+								for (int j = 3; j < snakearrsize; j++) {
+									snakearr[j].setPosition(snakearr[j - 1].getPosition().x + 10,snakearr[j].getPosition().y);
+								}
+							}
+							else if(snakearr[i].getPosition().x - snakearr[i - 1].getPosition().x < 0){
+								snakearr[i].setPosition(snakearr[i - 1].getPosition().x, snakearr[i].getPosition().y);
+								for (int j = 3; j < snakearrsize; j++) {
+									snakearr[j].setPosition(snakearr[j - 1].getPosition().x - 10, snakearr[j].getPosition().y);
+								}
+							}
+						}
+					}
+				}
+				for (int i = 2; i < snakearrsize; i++) {
+					if (snakearr[i].getPosition().y - snakearr[i - 1].getPosition().y) {
+					}
+				}
+
+				//	if (snakearr[i - 1].getPosition().y < snakearr[i].getPosition().y - 10) {
+				//		snakearr[i].setPosition(snakearr[i - 1].getPosition().x, snakearr[i - 1].getPosition().y + 10);
+				//	}
+				//}
+			}
+			if (direction == "down") {
+				if (snake.getPosition().x != snakearr[0].getPosition().x) {
+					snakearr[0].setPosition(snake.getPosition().x, snakearr[0].getPosition().y);
+				}
+				if (snake.getPosition().y > snakearr[0].getPosition().y + 10) {
+					snakearr[0].setPosition(snakearr[0].getPosition().x, y - 10);
+				}
+				for (int i = 1; i < snakearrsize; i++) {
+					if (snakearr[i - 1].getPosition().x != snakearr[i].getPosition().x) {
+						snakearr[i].setPosition(snakearr[i - 1].getPosition().x, snakearr[i].getPosition().y);
+					}
+					if (snakearr[i - 1].getPosition().y > snakearr[i].getPosition().y + 10) {
+						snakearr[i].setPosition(snakearr[i - 1].getPosition().x, snakearr[i - 1].getPosition().y - 10);
+					}
+				}
+			}
+			if (direction == "left") {
+				if (snake.getPosition().y != snakearr[0].getPosition().y) {
+					snakearr[0].setPosition(snakearr[0].getPosition().x, snake.getPosition().y);
+				}
+				if (snake.getPosition().x < snakearr[0].getPosition().x - 10) {
+					snakearr[0].setPosition(x + 10, snakearr[0].getPosition().y);
+				}
+				for (int i = 1; i < snakearrsize; i++) {
+					if (snakearr[i - 1].getPosition().y != snakearr[i].getPosition().y) {
+						snakearr[i].setPosition(snakearr[i].getPosition().x, snakearr[i - 1].getPosition().y);
+					}
+					if (snakearr[i - 1].getPosition().x < snakearr[i].getPosition().x - 10) {
+						snakearr[i].setPosition(snakearr[i - 1].getPosition().x + 10, snakearr[i].getPosition().y);
+					}
+				}
+			}
+			if (direction == "right") {
+				if (snake.getPosition().y != snakearr[0].getPosition().y) {
+					snakearr[0].setPosition(snakearr[0].getPosition().x, snake.getPosition().y);
+				}
+				if (snake.getPosition().x > snakearr[0].getPosition().x + 10) {
+					snakearr[0].setPosition(x - 10, snakearr[0].getPosition().y);
+				}
+				for (int i = 1; i < snakearrsize; i++) {
+					if (snakearr[i - 1].getPosition().y != snakearr[i].getPosition().y) {
+						snakearr[i].setPosition(snakearr[i].getPosition().x, snakearr[i - 1].getPosition().y);
+					}
+					if (snakearr[i - 1].getPosition().x > snakearr[i].getPosition().x + 10) {
+						snakearr[i].setPosition(snakearr[i - 1].getPosition().x - 10, snakearr[i].getPosition().y);
+					}
+				}
+			}
 			textx.setString("X:" + to_string(x));
 			texty.setString("Y:" + to_string(y));
-			console.setString("Speed:" + to_string(speed));
+			textspeed.setString("Speed:" + to_string(speed));
+			textspeed.setFillColor(Color::Black);
+			textspeed.setCharacterSize(20);
+			textspeed.setFont(font);
+			textspeed.setPosition(125, 140);
 			textscope.setString("Scope:" + to_string(scope));
 			window.draw(eat);
 			window.draw(snake);
+			for (int i = 0; i < snakearrsize; i++) {
+				window.draw(snakearr[i]);
+			}
 			window.draw(fonrectangle);
 			window.draw(textx);
 			window.draw(textscope);
-			window.draw(textspeed);
 			window.draw(texty);
 			window.draw(console);
+			window.draw(textspeed);
 			window.display();
 		};
 		if (life == false) {
