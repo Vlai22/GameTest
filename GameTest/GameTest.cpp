@@ -1,6 +1,7 @@
 ﻿#include <iostream> 
 #include "SFML/Graphics.hpp"
 #include "string.h"
+#include "windows.h"
 
 using namespace std;
 using namespace sf;
@@ -38,9 +39,9 @@ int main()
 	snake.setPosition(750, 520);
 
 	RectangleShape* snakearr = new RectangleShape[10]();
-	snakearr[0].setPosition(Vector2f(750,530));
+	snakearr[0].setPosition(Vector2f(750, 530));
 	snakearr[0].setFillColor(Color::Blue);
-	snakearr[0].setSize(Vector2f(10,10));
+	snakearr[0].setSize(Vector2f(10, 10));
 	snakearr[1].setPosition(Vector2f(750, 540));
 	snakearr[1].setFillColor(Color::Blue);
 	snakearr[1].setSize(Vector2f(10, 10));
@@ -82,7 +83,7 @@ int main()
 	//UI
 	ConvexShape fonrectangle;
 	fonrectangle.setPointCount(8);
-	fonrectangle.setPoint(0,Vector2f(50,10));
+	fonrectangle.setPoint(0, Vector2f(50, 10));
 	fonrectangle.setPoint(1, Vector2f(300, 10));
 	fonrectangle.setPoint(2, Vector2f(320, 40));
 	fonrectangle.setPoint(3, Vector2f(320, 540));
@@ -121,7 +122,7 @@ int main()
 		window.clear(Color::White);
 		window.draw(rectangle);
 		window.draw(fonrectangle);
-		
+
 		Event event;//Close
 		while (window.pollEvent(event))
 		{
@@ -133,15 +134,18 @@ int main()
 		//Variables
 		float x, y;
 		int scope = 0, snakearrsize = 9;
-		Vector2f position,snakesize,epos;
+		Vector2f position, snakesize, epos;
 		position = snake.getPosition();
 		x = position.x;
 		y = position.y;
 		string direction = "up";
-		float speed = 0.1;
+		float speed = 1;
 		bool life = false, put = false;
 		snakesize = snake.getSize();
-		
+
+		for (int i = 0; i < snakearrsize; i++) {
+			window.draw(snakearr[i]);
+		}
 
 		if (x <= 500 || x >= 990) {
 			snake.setPosition(750, 520);
@@ -153,8 +157,8 @@ int main()
 		//Keybpard events
 		if (Keyboard::isKeyPressed(Keyboard::W)) {
 			if (gameovervalue == false) {
-			life = true;
-			direction = "up";
+				life = true;
+				direction = "up";
 			}
 		}
 		if (Keyboard::isKeyPressed(Keyboard::A)) {
@@ -206,13 +210,13 @@ int main()
 				direction = "right";
 			}
 			if (Keyboard::isKeyPressed(Keyboard::R)) {
-				speed += 0.001;
+				speed += 0.1;
 			}
 			if (Keyboard::isKeyPressed(Keyboard::F)) {
-				if (speed <= 0 ) {
+				if (speed <= 0) {
 					speed += 1;
 				}
-				speed -= 0.001;
+				speed -= 0.1;
 			}
 
 			//Move for snake
@@ -235,11 +239,11 @@ int main()
 			}
 			if (y <= 10 || y >= 1000) {
 				life = false;
-				gameovervalue = true; 
+				gameovervalue = true;
 				window.draw(gameover);
 			}
 			epos = eat.getPosition();
-			if ((static_cast<int>(x) <= static_cast<int>(epos.x + 10) && static_cast<int>(y) <= static_cast<int>(epos.y + 10) && static_cast<int>(x) >= static_cast<int>(epos.x) && static_cast<int>(y) >= static_cast<int>(epos.y)) || (static_cast<int>(x + 10) <= static_cast<int>(epos.x + 10) && static_cast<int>(y + 10) <= static_cast<int>(epos.y + 10) && static_cast<int>(x + 10) >= static_cast<int>(epos.x) && static_cast<int>(y + 10) >= static_cast<int>(epos.y)) ) {
+			if ((static_cast<int>(x) <= static_cast<int>(epos.x + 10) && static_cast<int>(y) <= static_cast<int>(epos.y + 10) && static_cast<int>(x) >= static_cast<int>(epos.x) && static_cast<int>(y) >= static_cast<int>(epos.y)) || (static_cast<int>(x + 10) <= static_cast<int>(epos.x + 10) && static_cast<int>(y + 10) <= static_cast<int>(epos.y + 10) && static_cast<int>(x + 10) >= static_cast<int>(epos.x) && static_cast<int>(y + 10) >= static_cast<int>(epos.y))) {
 				scope++;
 				put = true;
 				eat.setPosition(Vector2f(rand() % 450 + 500, rand() % 990 + 10));
@@ -248,104 +252,143 @@ int main()
 				put = false;
 			}
 			snake.setPosition(x, y);
-			if (direction == "up") {
-				if (snake.getPosition().x != snakearr[0].getPosition().x) {
-					snakearr[0].setPosition(snake.getPosition().x, snakearr[0].getPosition().y);
-					for (int i = 1; i < snakearrsize; i++) {
-						if (snake.getPosition().x - snakearr[i].getPosition().x > 0) {
-							snakearr[i].setPosition(snakearr[i - 1].getPosition().x - 10, snakearr[i].getPosition().y);
+			//if (direction == "up") {
+			//	if (snake.getPosition().x != snakearr[0].getPosition().x) {
+			//		snakearr[0].setPosition(snake.getPosition().x, snakearr[0].getPosition().y);
+			//		for (int i = 1; i < snakearrsize; i++) {
+			//			if (snake.getPosition().x - snakearr[i].getPosition().x > 0) {
+			//				snakearr[i].setPosition(snakearr[i - 1].getPosition().x - 10, snakearr[i].getPosition().y);
+			//			}
+			//			else {
+			//				snakearr[i].setPosition(snakearr[i - 1].getPosition().x + 10, snakearr[i].getPosition().y);
+			//			}
+			//		}
+			//	}
+			//	if (snake.getPosition().y < snakearr[0].getPosition().y - 10) {
+			//		snakearr[0].setPosition(snakearr[0].getPosition().x, y + 10);
+			//	}
+			//	if (snakearr[0].getPosition().x - snakearr[1].getPosition().x >= 10 || snakearr[0].getPosition().x - snakearr[1].getPosition().x <= -10) {
+			//		if (snakearr[0].getPosition().y - snakearr[1].getPosition().y >= -10) {
+			//			snakearr[1].setPosition(snakearr[0].getPosition().x, snakearr[1].getPosition().y);
+			//		}
+			//	}
+			//	if (snakearr[0].getPosition().y - snakearr[1].getPosition().y <= -10) {
+			//		snakearr[1].setPosition(snakearr[1].getPosition().x, snakearr[0].getPosition().y + 10);
+			//	}
+			//	//for (int i = 2; i < snakearrsize; i++) {
+			//		//if (snakearr[i - 1].getPosition().x - snakearr[i].getPosition().x >= 10 || snakearr[i - 1].getPosition().x - snakearr[i].getPosition().x <= -10) {
+			//		//	if (snakearr[i - 1].getPosition().y - snakearr[i].getPosition().y <= -10) {
+			//		//		if (snakearr[i].getPosition().x - snakearr[i - 1].getPosition().x > 0) {
+			//		//			snakearr[i].setPosition(snakearr[i - 1].getPosition().x, snakearr[i].getPosition().y);
+			//		//			for (int j = 3; j < snakearrsize; j++) {
+			//		//				snakearr[j].setPosition(snakearr[j - 1].getPosition().x + 10, snakearr[j].getPosition().y);
+			//		//			}
+			//		//		}
+			//		//		else if (snakearr[i].getPosition().x - snakearr[i - 1].getPosition().x < 0) {
+			//		//			snakearr[i].setPosition(snakearr[i - 1].getPosition().x, snakearr[i].getPosition().y);
+			//		//			for (int j = 3; j < snakearrsize; j++) {
+			//		//				snakearr[j].setPosition(snakearr[j - 1].getPosition().x - 10, snakearr[j].getPosition().y);
+			//		//			}
+			//		//		}
+			//		//	}
+			//		//}
+			//	//}
+			//	for (int i = 2; i < snakearrsize; i++) {
+			//		if (snakearr[i].getPosition().y - snakearr[i - 1].getPosition().y >= 10) {
+			//			snakearr[i].setPosition(snakearr[i - 1].getPosition().x, snakearr[i - 1].getPosition().y + 10);
+
+			//		}
+			//	}
+			//}
+			//if (direction == "down") {
+			//	if (snake.getPosition().x != snakearr[0].getPosition().x) {
+			//		snakearr[0].setPosition(snake.getPosition().x, snakearr[0].getPosition().y);
+			//	}
+			//	if (snake.getPosition().y > snakearr[0].getPosition().y + 10) {
+			//		snakearr[0].setPosition(snakearr[0].getPosition().x, y - 10);
+			//	}
+			//	for (int i = 1; i < snakearrsize; i++) {
+			//		if (snakearr[i - 1].getPosition().x != snakearr[i].getPosition().x) {
+			//			snakearr[i].setPosition(snakearr[i - 1].getPosition().x, snakearr[i].getPosition().y);
+			//		}
+			//		if (snakearr[i - 1].getPosition().y > snakearr[i].getPosition().y + 10) {
+			//			snakearr[i].setPosition(snakearr[i - 1].getPosition().x, snakearr[i - 1].getPosition().y - 10);
+			//		}
+			//	}
+			//}
+			//if (direction == "left") {
+			//	if (snake.getPosition().y != snakearr[0].getPosition().y) {
+			//		snakearr[0].setPosition(snakearr[0].getPosition().x, snake.getPosition().y);
+			//	}
+			//	if (snake.getPosition().x < snakearr[0].getPosition().x - 10) {
+			//		snakearr[0].setPosition(x + 10, snakearr[0].getPosition().y);
+			//	}
+			//	for (int i = 1; i < snakearrsize; i++) {
+			//		if (snakearr[i - 1].getPosition().y != snakearr[i].getPosition().y) {
+			//			snakearr[i].setPosition(snakearr[i].getPosition().x, snakearr[i - 1].getPosition().y);
+			//		}
+			//		if (snakearr[i - 1].getPosition().x < snakearr[i].getPosition().x - 10) {
+			//			snakearr[i].setPosition(snakearr[i - 1].getPosition().x + 10, snakearr[i].getPosition().y);
+			//		}
+			//	}
+			//}
+			//if (direction == "right") {
+			//	if (snake.getPosition().y != snakearr[0].getPosition().y) {
+			//		snakearr[0].setPosition(snakearr[0].getPosition().x, snake.getPosition().y);
+			//	}
+			//	if (snake.getPosition().x > snakearr[0].getPosition().x + 10) {
+			//		snakearr[0].setPosition(x - 10, snakearr[0].getPosition().y);
+			//	}
+			//	for (int i = 1; i < snakearrsize; i++) {
+			//		if (snakearr[i - 1].getPosition().y != snakearr[i].getPosition().y) {
+			//			snakearr[i].setPosition(snakearr[i].getPosition().x, snakearr[i - 1].getPosition().y);
+			//		}
+			//		if (snakearr[i - 1].getPosition().x > snakearr[i].getPosition().x + 10) {
+			//			snakearr[i].setPosition(snakearr[i - 1].getPosition().x - 10, snakearr[i].getPosition().y);
+			//		}
+			//	}
+			//}
+			//if (direction == "left" || direction == "right") {
+				if (snake.getPosition().x - snakearr[0].getPosition().x >= 10 || snake.getPosition().x - snakearr[0].getPosition().x <= -10) {
+					if (snake.getPosition().x - snakearr[0].getPosition().x > 0) {
+						snakearr[0].setPosition(snake.getPosition().x - 10, snake.getPosition().y);
+					}
+					else {
+						snakearr[0].setPosition(snake.getPosition().x + 10, snake.getPosition().y);
+					}
+				}
+			//}
+			//if (direction == "up" || direction == "down") {
+				if (snake.getPosition().y - snakearr[0].getPosition().y >= 10 || snake.getPosition().y - snakearr[0].getPosition().y <= -10) {
+					if (snake.getPosition().y - snakearr[0].getPosition().y > 0) {
+						snakearr[0].setPosition(snake.getPosition().x, snake.getPosition().y - 10);
+					}
+					else {
+						snakearr[0].setPosition(snake.getPosition().x, snake.getPosition().y + 10);
+					}
+				}
+			//}
+			for (int i = 1; i < snakearrsize;i++) {
+				//if (direction == "left" || direction == "right") {
+					if (snakearr[i - 1].getPosition().x - snakearr[i].getPosition().x >= 10 || snakearr[i - 1].getPosition().x - snakearr[i].getPosition().x <= -10) {
+						if (snakearr[i - 1].getPosition().x - snakearr[i].getPosition().x > 0) {
+							snakearr[i].setPosition(snakearr[i - 1].getPosition().x - 10, snakearr[i - 1].getPosition().y);
 						}
 						else {
-							snakearr[i].setPosition(snakearr[i - 1].getPosition().x + 10, snakearr[i].getPosition().y);
+							snakearr[i].setPosition(snakearr[i - 1].getPosition().x + 10, snakearr[i - 1].getPosition().y);
 						}
 					}
-				}
-				if (snake.getPosition().y < snakearr[0].getPosition().y - 10) {
-					snakearr[0].setPosition(snakearr[0].getPosition().x, y + 10);
-				}
-				if (snakearr[0].getPosition().x - snakearr[1].getPosition().x >= 10 || snakearr[0].getPosition().x - snakearr[1].getPosition().x <= -10) {
-					if (snakearr[0].getPosition().y - snakearr[1].getPosition().y >= -10) {
-						snakearr[1].setPosition(snakearr[0].getPosition().x, snakearr[1].getPosition().y);
-					}
-				}
-				if (snakearr[0].getPosition().y - snakearr[1].getPosition().y <= -10) {
-					snakearr[1].setPosition(snakearr[1].getPosition().x,snakearr[0].getPosition().y + 10);
-				}
-				for (int i = 2; i < snakearrsize;i++ ) {
-					if (snakearr[i - 1].getPosition().x - snakearr[i].getPosition().x >= 10 || snakearr[i - 1].getPosition().x - snakearr[i].getPosition().x <= -10) {
-						if (snakearr[i - 1].getPosition().y - snakearr[i].getPosition().y <= -10) {
-							if (snakearr[i].getPosition().x - snakearr[i - 1].getPosition().x > 0) {
-								snakearr[i].setPosition(snakearr[i - 1].getPosition().x, snakearr[i].getPosition().y);
-								for (int j = 3; j < snakearrsize; j++) {
-									snakearr[j].setPosition(snakearr[j - 1].getPosition().x + 10,snakearr[j].getPosition().y);
-								}
-							}
-							else if(snakearr[i].getPosition().x - snakearr[i - 1].getPosition().x < 0){
-								snakearr[i].setPosition(snakearr[i - 1].getPosition().x, snakearr[i].getPosition().y);
-								for (int j = 3; j < snakearrsize; j++) {
-									snakearr[j].setPosition(snakearr[j - 1].getPosition().x - 10, snakearr[j].getPosition().y);
-								}
-							}
-						}
-					}
-				}
-				for (int i = 2; i < snakearrsize; i++) {
-					if (snakearr[i].getPosition().y - snakearr[i - 1].getPosition().y) {
-					}
-				}
-
-				//	if (snakearr[i - 1].getPosition().y < snakearr[i].getPosition().y - 10) {
-				//		snakearr[i].setPosition(snakearr[i - 1].getPosition().x, snakearr[i - 1].getPosition().y + 10);
-				//	}
 				//}
-			}
-			if (direction == "down") {
-				if (snake.getPosition().x != snakearr[0].getPosition().x) {
-					snakearr[0].setPosition(snake.getPosition().x, snakearr[0].getPosition().y);
-				}
-				if (snake.getPosition().y > snakearr[0].getPosition().y + 10) {
-					snakearr[0].setPosition(snakearr[0].getPosition().x, y - 10);
-				}
-				for (int i = 1; i < snakearrsize; i++) {
-					if (snakearr[i - 1].getPosition().x != snakearr[i].getPosition().x) {
-						snakearr[i].setPosition(snakearr[i - 1].getPosition().x, snakearr[i].getPosition().y);
+				//if (direction == "up" || direction == "down") {
+					if (snakearr[i - 1].getPosition().y - snakearr[i].getPosition().y >= 10 || snakearr[i - 1].getPosition().y - snakearr[i].getPosition().y <= -10) {
+						if (snakearr[i - 1].getPosition().y - snakearr[i].getPosition().y > 0) {
+							snakearr[i].setPosition(snakearr[i - 1].getPosition().x, snakearr[i - 1].getPosition().y - 10);
+						}
+						else {
+							snakearr[i].setPosition(snakearr[i - 1].getPosition().x, snakearr[i - 1].getPosition().y + 10);
+						}
 					}
-					if (snakearr[i - 1].getPosition().y > snakearr[i].getPosition().y + 10) {
-						snakearr[i].setPosition(snakearr[i - 1].getPosition().x, snakearr[i - 1].getPosition().y - 10);
-					}
-				}
-			}
-			if (direction == "left") {
-				if (snake.getPosition().y != snakearr[0].getPosition().y) {
-					snakearr[0].setPosition(snakearr[0].getPosition().x, snake.getPosition().y);
-				}
-				if (snake.getPosition().x < snakearr[0].getPosition().x - 10) {
-					snakearr[0].setPosition(x + 10, snakearr[0].getPosition().y);
-				}
-				for (int i = 1; i < snakearrsize; i++) {
-					if (snakearr[i - 1].getPosition().y != snakearr[i].getPosition().y) {
-						snakearr[i].setPosition(snakearr[i].getPosition().x, snakearr[i - 1].getPosition().y);
-					}
-					if (snakearr[i - 1].getPosition().x < snakearr[i].getPosition().x - 10) {
-						snakearr[i].setPosition(snakearr[i - 1].getPosition().x + 10, snakearr[i].getPosition().y);
-					}
-				}
-			}
-			if (direction == "right") {
-				if (snake.getPosition().y != snakearr[0].getPosition().y) {
-					snakearr[0].setPosition(snakearr[0].getPosition().x, snake.getPosition().y);
-				}
-				if (snake.getPosition().x > snakearr[0].getPosition().x + 10) {
-					snakearr[0].setPosition(x - 10, snakearr[0].getPosition().y);
-				}
-				for (int i = 1; i < snakearrsize; i++) {
-					if (snakearr[i - 1].getPosition().y != snakearr[i].getPosition().y) {
-						snakearr[i].setPosition(snakearr[i].getPosition().x, snakearr[i - 1].getPosition().y);
-					}
-					if (snakearr[i - 1].getPosition().x > snakearr[i].getPosition().x + 10) {
-						snakearr[i].setPosition(snakearr[i - 1].getPosition().x - 10, snakearr[i].getPosition().y);
-					}
-				}
+				//}
 			}
 			textx.setString("X:" + to_string(x));
 			texty.setString("Y:" + to_string(y));
@@ -366,6 +409,7 @@ int main()
 			window.draw(texty);
 			window.draw(console);
 			window.draw(textspeed);
+			Sleep(10);
 			window.display();
 		};
 		if (life == false) {
